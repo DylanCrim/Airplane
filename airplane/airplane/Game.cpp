@@ -1,7 +1,3 @@
-/// <summary>
-
-/// </summary>
-
 #include "Game.h"
 #include <iostream>
 
@@ -74,6 +70,14 @@ void Game::processEvents()
 		{
 			processKeys(newEvent);
 		}
+		if (sf::Event::MouseButtonPressed == newEvent.type) //user Clicked mouse down
+		{
+			processMousePress(newEvent);
+		}
+		if (sf::Event::MouseButtonReleased == newEvent.type) //user released click
+		{
+			processMouseRelease(newEvent);
+		}
 	}
 }
 
@@ -89,6 +93,28 @@ void Game::processKeys(sf::Event t_event)
 		m_exitGame = true;
 	}
 }
+
+void Game::processMousePress(sf::Event t_event)
+{
+	m_firstclick.x = t_event.mouseButton.x;
+	m_firstclick.y = t_event.mouseButton.y;
+}
+
+void Game::processMouseRelease(sf::Event t_event)
+{
+	m_secondclick.x = t_event.mouseButton.x;
+	m_secondclick.y = t_event.mouseButton.y;
+	sf::Vector2f velocity = m_secondclick - m_firstclick;
+	float forwardRadians = std::atan2(velocity.y, velocity.x);
+	float forwardDegrees = 180.0f * forwardRadians / static_cast<float>(M_PI);
+	forwardDegrees += 90;
+
+	m_plane1Velocity = velocity / 100.0f;
+	m_plane1Forwards = forwardDegrees;
+	m_plane1Sprite.setRotation(forwardDegrees);
+
+}
+
 
 /// <summary>
 /// Update the game world
@@ -110,7 +136,7 @@ void Game::render()
 	m_window.clear(sf::Color::White);
 	m_window.draw(m_welcomeMessage);
 	m_window.draw(m_skySprite);
-	m_window.draw(m_airplaneSprite);
+	m_window.draw(m_plane1Sprite);
 	m_window.display();
 }
 
@@ -148,15 +174,16 @@ void Game::setupSprite()
 	m_skySprite.setTexture(m_skyTex);
 	m_skySprite.setTextureRect(sf::IntRect{ 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT });
 
-	sf::IntRect airplaneRect{ 3, 11, 104, 93 };
-	sf::Vector2f airplaneStart{ 300.0f, 180.0f };
+	sf::IntRect plane1Rect{ 3, 11, 104, 93 };
+	sf::Vector2f plane1Start{ 300.0f, 180.0f };
 
-	if (!m_airplaneTex.loadFromFile("ASSETS\\IMAGES\\planes.png"))
+	if (!m_plane1Tex.loadFromFile("ASSETS\\IMAGES\\planes.png"))
 	{
 		std::cout << "problem loading plane texture" << std::endl;
 	}
-	m_airplaneSprite.setTexture(m_airplaneTex);
-	m_airplaneSprite.setTextureRect(airplaneRect);
-	m_airplaneSprite.setPosition(airplaneStart);
+	m_plane1Sprite.setTexture(m_plane1Tex);
+	m_plane1Sprite.setTextureRect(plane1Rect);
+	m_plane1Sprite.setOrigin(plane1Rect.width / 2.0f, plane1Rect.height / 2.0f); 
+	m_plane1Sprite.setPosition(plane1Start);
 	
 }
