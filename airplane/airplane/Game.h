@@ -31,7 +31,7 @@ private:
 	void processMouseRelease(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
 	void render();
-
+	void movePlanes();
 	void setupFontAndText();
 	void setupSprite();
 

@@ -126,6 +126,7 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	movePlanes();
 }
 
 /// <summary>
@@ -183,7 +184,13 @@ void Game::setupSprite()
 	}
 	m_plane1Sprite.setTexture(m_plane1Tex);
 	m_plane1Sprite.setTextureRect(plane1Rect);
-	m_plane1Sprite.setOrigin(plane1Rect.width / 2.0f, plane1Rect.height / 2.0f); 
+	m_plane1Sprite.setOrigin(plane1Rect.width / 2.0f, plane1Rect.height / 2.0f);
 	m_plane1Sprite.setPosition(plane1Start);
-	
+}
+
+void Game::movePlanes()
+{
+	m_plane1Location += m_plane1Velocity;
+	m_plane1Sprite.setPosition(m_plane1Location);
+
 }
