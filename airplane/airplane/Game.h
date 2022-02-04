@@ -32,6 +32,7 @@ private:
 	void update(sf::Time t_deltaTime);
 	void render();
 	void movePlanes();
+	void boundaryCheck();
 	void setupFontAndText();
 	void setupSprite();
 

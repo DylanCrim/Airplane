@@ -94,12 +94,20 @@ void Game::processKeys(sf::Event t_event)
 	}
 }
 
+/// <summary>
+/// Takes the first click of the mouse
+/// </summary>
+/// <param name="t_event"></param>
 void Game::processMousePress(sf::Event t_event)
 {
 	m_firstclick.x = t_event.mouseButton.x;
 	m_firstclick.y = t_event.mouseButton.y;
 }
 
+/// <summary>
+/// Activated when mouse button is released, controlling velocity and rotation
+/// </summary>
+/// <param name="t_event"></param>
 void Game::processMouseRelease(sf::Event t_event)
 {
 	m_secondclick.x = t_event.mouseButton.x;
@@ -111,7 +119,7 @@ void Game::processMouseRelease(sf::Event t_event)
 
 	m_plane1Velocity = velocity / 100.0f;
 	m_plane1Forwards = forwardDegrees;
-	m_plane1Sprite.setRotation(forwardDegrees);
+	m_plane1Sprite.setRotation(forwardDegrees); //Rotation of the plane changes the direction which is forward, movement is always velocity added in this way
 
 }
 
@@ -127,6 +135,7 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 	movePlanes();
+	boundaryCheck();
 }
 
 /// <summary>
@@ -188,9 +197,40 @@ void Game::setupSprite()
 	m_plane1Sprite.setPosition(plane1Start);
 }
 
+/// <summary>
+/// Takes the velocity of the plane and makes the plane move
+/// </summary>
 void Game::movePlanes()
 {
 	m_plane1Location += m_plane1Velocity;
 	m_plane1Sprite.setPosition(m_plane1Location);
+
+}
+
+/// <summary>
+/// Prevents the plane from moving offscreen or other set boundaries
+/// </summary>
+void Game::boundaryCheck()
+{
+	float maxBoundaryWidth = static_cast<float>(SCREEN_WIDTH);
+	float maxBoundaryHeight = static_cast<float>(SCREEN_HEIGHT);
+	float minBoundaryWidth = 0.0f; //Additional boundaries for testing
+	float minBoundaryHeight = 0.0f;
+	if (m_plane1Location.x < minBoundaryWidth)
+	{
+		m_plane1Location.x = minBoundaryWidth;
+	}
+	if (m_plane1Location.x > maxBoundaryWidth)
+	{
+		m_plane1Location.x = maxBoundaryWidth;
+	}
+	if (m_plane1Location.y < minBoundaryHeight)
+	{
+		m_plane1Location.y = minBoundaryHeight;
+	}
+	if (m_plane1Location.y > maxBoundaryHeight)
+	{
+		m_plane1Location.y = maxBoundaryHeight;
+	}
 
 }
