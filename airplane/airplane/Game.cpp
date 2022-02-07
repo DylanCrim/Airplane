@@ -117,10 +117,18 @@ void Game::processMouseRelease(sf::Event t_event)
 	float forwardDegrees = 180.0f * forwardRadians / static_cast<float>(M_PI);
 	forwardDegrees += 90;
 
-	m_plane1Velocity = velocity / 100.0f;
-	m_plane1Forwards = forwardDegrees;
-	m_plane1Sprite.setRotation(forwardDegrees); //Rotation of the plane changes the direction which is forward, movement is always velocity added in this way
-
+	if (sf::Mouse::Left == t_event.mouseButton.button)
+	{
+		m_plane1Velocity = velocity / 100.0f;
+		m_plane1Forwards = forwardDegrees;
+		m_plane1Sprite.setRotation(forwardDegrees); //Rotation of the plane changes the direction which is forward, movement is always velocity added in this way
+	}
+	if (sf::Mouse::Right == t_event.mouseButton.button)
+	{
+		m_plane2Velocity = velocity / 50.0f;
+		m_plane2Forwards = forwardDegrees;
+		m_plane2Sprite.setRotation(forwardDegrees); //Rotation of the plane changes the direction which is forward, movement is always velocity added in this way
+	}
 }
 
 
@@ -147,6 +155,7 @@ void Game::render()
 	m_window.draw(m_welcomeMessage);
 	m_window.draw(m_skySprite);
 	m_window.draw(m_plane1Sprite);
+	m_window.draw(m_plane2Sprite);
 	m_window.display();
 }
 
@@ -187,14 +196,26 @@ void Game::setupSprite()
 	sf::IntRect plane1Rect{ 3, 11, 104, 93 };
 	sf::Vector2f plane1Start{ 300.0f, 180.0f };
 
+	sf::IntRect plane2Rect{ 362, 115, 87, 69 };
+	sf::Vector2f plane2Start{ 500.0f, 300.0f };
+
 	if (!m_plane1Tex.loadFromFile("ASSETS\\IMAGES\\planes.png"))
 	{
-		std::cout << "problem loading plane texture" << std::endl;
+		std::cout << "problem loading plane 1 texture" << std::endl;
 	}
 	m_plane1Sprite.setTexture(m_plane1Tex);
 	m_plane1Sprite.setTextureRect(plane1Rect);
 	m_plane1Sprite.setOrigin(plane1Rect.width / 2.0f, plane1Rect.height / 2.0f);
 	m_plane1Sprite.setPosition(plane1Start);
+
+	if (!m_plane2Tex.loadFromFile("ASSETS\\IMAGES\\planes.png"))
+	{
+		std::cout << "problem loading plane 2 texture" << std::endl;
+	}
+	m_plane2Sprite.setTexture(m_plane1Tex);
+	m_plane2Sprite.setTextureRect(plane2Rect);
+	m_plane2Sprite.setOrigin(plane2Rect.width / 2.0f, plane2Rect.height / 2.0f);
+	m_plane2Sprite.setPosition(plane2Start);
 }
 
 /// <summary>
@@ -204,6 +225,8 @@ void Game::movePlanes()
 {
 	m_plane1Location += m_plane1Velocity;
 	m_plane1Sprite.setPosition(m_plane1Location);
+	m_plane2Location += m_plane2Velocity;
+	m_plane2Sprite.setPosition(m_plane2Location);
 
 }
 
@@ -232,5 +255,20 @@ void Game::boundaryCheck()
 	{
 		m_plane1Location.y = maxBoundaryHeight;
 	}
-
+	if (m_plane2Location.x < minBoundaryWidth)
+	{
+		m_plane2Location.x = minBoundaryWidth;
+	}
+	if (m_plane2Location.x > maxBoundaryWidth)
+	{
+		m_plane2Location.x = maxBoundaryWidth;
+	}
+	if (m_plane2Location.y < minBoundaryHeight)
+	{
+		m_plane2Location.y = minBoundaryHeight;
+	}
+	if (m_plane2Location.y > maxBoundaryHeight)
+	{
+		m_plane2Location.y = maxBoundaryHeight;
+	}
 }

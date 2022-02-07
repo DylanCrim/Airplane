@@ -41,6 +41,8 @@ private:
 	sf::Text m_welcomeMessage; // text used for message on screen
 	sf::Texture m_plane1Tex;
 	sf::Sprite m_plane1Sprite;
+	sf::Sprite m_plane2Sprite;
+	sf::Texture m_plane2Tex;
 	sf::Texture m_skyTex;
 	sf::Sprite m_skySprite;
 	sf::Vector2f m_firstclick{ 0.0f,0.0f };
@@ -48,6 +50,9 @@ private:
 	sf::Vector2f m_plane1Velocity{ 1.0f, -1.0f };
 	float m_plane1Forwards = 45.0f;
 	sf::Vector2f m_plane1Location;
+	sf::Vector2f m_plane2Velocity{ 4.0f, -4.0f };
+	float m_plane2Forwards = 200.0f;
+	sf::Vector2f m_plane2Location;
 	bool m_exitGame; // control exiting game
 
 };
